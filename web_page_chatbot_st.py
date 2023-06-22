@@ -1,6 +1,6 @@
 """
 Purpose:
-    AWS Well-Architected Chatbot
+    Web_Page Chatbot
 """
 
 # Python imports
@@ -10,6 +10,8 @@ import os
 import streamlit as st
 import ai_utils
 import openai
+
+from ingest import embedding
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -65,13 +67,13 @@ if "docs" not in st.session_state:
     st.session_state["docs"] = []
 
 st.set_page_config(
-    page_title="AWS Well-Architected Chatbot",
-    page_icon="AWS",
+    page_title="Web_Page Chatbot",
+    page_icon="Chatbot",
     layout="centered",
     initial_sidebar_state="auto",
     menu_items={
-        "Report a bug": "https://github.com/banjtheman/aws_well_arch_chatbot/",
-        "About": """The purpose of this chatbot is to provide users with answers and resources related to the AWS Well-Architected Framework, which is designed to help cloud architects build secure, high-performing, resilient, and efficient infrastructure for a variety of applications and workloads. Learn more here: https://github.com/banjtheman/aws_well_arch_chatbot
+        "Report a bug": "https://github.com/luanluandehaobaoman/webpage_chatbot",
+        "About": """The purpose of this chatbot is to provide users with answers and resources related to the given web page.
             """,
     },
 )
@@ -89,8 +91,6 @@ def load_chain():
     return ai_utils.setup_chain()
 
 
-chain = load_chain()
-
 
 def sidebar() -> None:
     """
@@ -103,12 +103,12 @@ def sidebar() -> None:
     """
 
     st.sidebar.image(
-        "https://d1.awsstatic.com/gamedev/Programs/OnRamp/gt-well-architected.4234ac16be6435d0ddd4ca693ea08106bc33de9f.png",
+        "https://cdn.technologyadvice.com/wp-content/uploads/2018/02/friendly-chatbot-700x408.jpg",
         use_column_width=True,
     )
 
     st.sidebar.markdown(
-        "AWS Well-Architected helps cloud architects build secure, high-performing, resilient, and efficient infrastructure for a variety of applications and workloads. Built around six pillars—operational excellence, security, reliability, performance efficiency, cost optimization, and sustainability—AWS Well-Architected provides a consistent approach for customers and partners to evaluate architectures and implement scalable designs.\n This chatbot is a **prototype** application and is for demonstration purposes only."
+        "Web Page Chatbot，powered by ChatGPT."
     )
 
 
@@ -124,6 +124,23 @@ def app() -> None:
 
     # Spin up the sidebar
     sidebar()
+    # Get the sitemap URLs from the user
+
+    sitemap_url_list = st.text_area("Enter the sitemap URLs (comma-separated):").split(',')
+
+    # Button to start the embedding process
+    start_button = st.button("Start Embedding")
+
+    if start_button and sitemap_url_list[0]:  # Check if the user has entered any URLs and clicked the button
+        # Load the content and create embeddings
+        st.write(sitemap_url_list)
+        embedding(sitemap_url_list)
+        # embedding("https://zh.wikipedia.org/wiki/2023%E5%B9%B4%E4%B8%96%E7%95%8C%E4%B8%80%E7%BA%A7%E6%96%B9%E7%A8%8B%E5%BC%8F%E9%94%A6%E6%A0%87%E8%B5%9B")
+    #
+    # # Check if the embeddings exist
+    if os.path.exists("local_index"):
+    #     # Load the chain with the created embeddings
+        chain = load_chain()
 
     with st.container():
         # Load chat history
@@ -175,9 +192,12 @@ def main() -> None:
         N/A
     """
 
+
+
+
     # Start the streamlit app
-    st.title("AWS Well-Architected Chatbot")
-    st.subheader("Ask and Learn")
+    st.title("Web Page Chatbot")
+    st.subheader("Paste url and start chatting")
 
     app()
 
