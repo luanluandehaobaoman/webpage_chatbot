@@ -49,10 +49,9 @@ def embedding(url_list) -> None:
         # Save embeddings to local_index
         embed_text(texts, "local_index")
 
-
-
 if __name__ == "__main__":
     # Single Wikipedia page URL
     url = "https://zh.wikipedia.org/wiki/2023%E5%B9%B4%E4%B8%96%E7%95%8C%E4%B8%80%E7%BA%A7%E6%96%B9%E7%A8%8B%E5%BC%8F%E9%94%A6%E6%A0%87%E8%B5%9B"
-
-    embedding(url)
+    url1="https://aws.amazon.com/cn/blogs/machine-learning/how-medidata-used-amazon-sagemaker-asynchronous-inference-to-accelerate-ml-inference-predictions-up-to-30-times-faster/"
+    url2= "https://docs.aws.amazon.com/zh_cn/sagemaker/latest/dg/serverless-endpoints.html"
+    embedding([url1,url2])
